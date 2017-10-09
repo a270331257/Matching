@@ -2,7 +2,6 @@
 #include <stdlib.h> 
 #include "iostream"
 #include "string.h"
-#include <fstream>
 #include <cstring>
 #include <algorithm> 
 using namespace std;
@@ -108,7 +107,7 @@ int main()
 	string day,timec,depar,tag;
 	string event,deparno="D001";
 	srand((unsigned)time(NULL));  
-	freopen("input_data.txt" ,"w", stdout);
+	freopen("input_data.txt","w",stdout);
 	printf("{\n\"student\":[\n");
 /************************************************/ 
 /*随机生成学生*/ 
@@ -233,23 +232,25 @@ m=0;
 }
 cout<<']'<<endl;  
 cout<<'}' <<endl;
-fclose(stdout); 
-freopen("output_data.txt" ,"w", stdout);
+fclose(stdout);
+
 /**********************匹配算法********************/ 
-int j=0,k1=0,k2=0,flag=0;
+
+int j=0,k1=0,k2=0,flag=0,dnum=0;
 int stuflag[300],stuflag2[300],stuflag3[20];
+for(dnum=0;dnum<20;dnum++){//遍历20个部门 
 for(i=0;i<300;i++)
 {
 	for(j=0;j<5;j++)//遍历该学生5个志愿 
 	{
-		if(sapp[i][j]==deno[0])
+		if(sapp[i][j]==deno[dnum])//志愿符合 
 		{
 			//cout<<"find!!!!!!!!"<<endl;
 			for(k1=0;k1<10;k1++)//遍历该学生10个兴趣 
 			{
 				for(k2=0;k2<10;k2++)//遍历该部门10个兴趣 
 				{
-					if(stag[i][k1]==detag[0][k2])
+					if(stag[i][k1]==detag[dnum][k2])
 					{
 						flag++;
 						break;
@@ -264,7 +265,8 @@ for(i=0;i<300;i++)
 	flag=0;
 }
 
-/**************排序****************/
+
+	/**************排序****************/
 	int t=0;
 	sort(stuflag,stuflag+300) ;
 	//for(i=298;i>=0;i--) cout<<stuflag[i]<<' ';
@@ -281,36 +283,50 @@ for(i=0;i<300;i++)
                 break;
             }
         }
-/*********************************************/
-    cout<<'{'<<endl;
-    cout<<"\"unlucky_student\": ["<<endl;
-    cout<<'\"';
-	//输出未被录取的学生 
-    cout<<"\","<<endl;
-	cout<<"],"<<endl;   
+        
+/******************以下为输出**********************/ 
+freopen("output_data.txt","w",stdout);
 /*********************************************/
 	cout<<"\"admitted\": ["<<endl;
     cout<<'{'<<endl;
     cout<<"\"member\": ["<<endl;
     cout<<'\"';
-	//输出录取的学生 
+	for(t=0;t<delim[dnum];t++)
+	{
+		if(stuflag3[t]<10)
+		{
+			cout<<"\"03150200"<<stuflag3[t]<<"\""<<endl;
+		}
+		else if(stuflag3[t]<100&&stuflag3[t]>=10)
+		{
+			cout<<"\"0315020"<<stuflag3[t]<<"\""<<endl;
+		}
+		else cout<<"\"031502"<<stuflag3[t]<<"\""<<endl;
+		sno[stuflag3[t]-1]="choosed";
+	}
 	cout<<'\"'<<endl;
 	cout<<"],"<<endl;  
     cout<<"\"department_no\": "<<endl;	
 	cout<<'\"';
-	//输出对应的部门 
-	cout<<'\"'<<endl;
+	cout<<'\"'<<deno[dnum]<<'\"';
 	cout<<"},"<<endl;
 	cout<<"],"<<endl; 
-/*********************************************/
+}
+/**********输出未被录取的学生**************/ 
+cout<<'{'<<endl;
+    cout<<"\"unlucky_student\": ["<<endl;
+    cout<<'\"';
+	
+	for(i=0;i<300;i++)
+{
+	if(sno[i]!="choosed") cout<<'\"'<<sno[i]<<"\","<<endl;
+ }  
+	cout<<"],"<<endl;   
 	cout<<"\"unlucky_department\": ["<<endl;
 	cout<<'\"';
-	//输出未招满学生 
 	cout<<'\"'<<','<<endl;//注意，最后一个部门不用输出逗号
 	cout<<"]"<<endl;
 	cout<<"}"<<endl;
-/*********************************************/
-fclose(stdout); 
+fclose(stdout);
 return 0;
 }
-
