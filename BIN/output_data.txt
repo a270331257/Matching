@@ -1,0 +1,17 @@
+{
+"unlucky_student": [
+"",
+],
+"admitted": [
+{
+"member": [
+""
+],
+"department_no": 
+""
+},
+],
+"unlucky_department": [
+"",
+]
+}
